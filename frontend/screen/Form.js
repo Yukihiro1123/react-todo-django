@@ -165,10 +165,10 @@ const Form = ({formTitle, Title, Completed, Category, Description, StartDate, En
       <DateTimePicker
         testID="dateTimePicker"
         value={startDate}
-        mode="date"
+        mode="datetime"
         is24Hour={true}
         display="compact"
-        style={{width: 100}}
+        style={{width: 200}}
         minimumDate={new Date(2020, 1, 1)}
         onChange={onChangeStart}
       />
@@ -181,31 +181,17 @@ const Form = ({formTitle, Title, Completed, Category, Description, StartDate, En
       <DateTimePicker
         testID="dateTimePicker"
         value={endDate}
-        mode="date"
+        mode="datetime"
         is24Hour={true}
         display="compact"
-        style={{width: 100}}
+        style={{width: 200}}
         minimumDate={new Date(2020, 1, 1)}
         onChange={onChangeEnd}
       />
       </View>
     );
   }
-  function TimePick(time) {
-    return (
-      <DateTimePicker
-        testID="dateTimePicker"
-        value={time}
-        mode="time"
-        is24Hour={true}
-        display="compact"
-        style={{width: 100,marginLeft: 5,borderColor: COLORS.lightGray,backgroundColor: COLORS.white,}}
-        textColor="white"
-        minimumDate={new Date(2020, 0, 1)}
-        onPress={value => setCategory(value)}
-      />
-    );
-  }
+
   function Check() {
     return (
       <Switch value={completed} onValueChange={onToggleSwitch} color={COLORS.darkblue} />
@@ -273,18 +259,24 @@ const Form = ({formTitle, Title, Completed, Category, Description, StartDate, En
         </View>
         {/* 日付 */}
         <View>
-          <View style={{marginTop: 10,  flexDirection: 'row'}}>
-            <Text style={{fontSize: SIZES.body3}}>Date&Time</Text>
+          <View style={{marginTop: 10,  flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+            <Text style={{fontSize: SIZES.body3, marginRight: 40}}>Start date </Text>
+            <View>
+            {StartDatePick()}
+            </View>
             <HelperText type="error" visible={valDate} style={{fontSize: SIZES.body4}}>
                 invalid date.
             </HelperText>
           </View>
-          <View style={{marginVertical: 10}}>
-          <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start', paddingTop: 0, paddingVertical: SIZES.padding / 3}}>
-            {StartDatePick()}
+          <View style={{marginTop: 10,  flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+            <Text style={{fontSize: SIZES.body3, marginRight: 40}}>End date   </Text>
+            <View>
             {EndDatePick()}
+            </View>
+            <HelperText type="error" visible={valDate} style={{fontSize: SIZES.body4}}>
+                invalid date.
+            </HelperText>
           </View>
-        </View>
         </View>
         {/* 状態 */}
         <View style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'space-between'}}>

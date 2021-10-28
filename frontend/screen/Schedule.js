@@ -178,10 +178,25 @@ const Schedule = () => {
                 }}></View>
             </View>
             <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
-              <Paragraph style={{fontSize: SIZES.h4}}>{item.title}</Paragraph>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Paragraph style={{fontSize: SIZES.h4}}>{item.title}</Paragraph>
+                <Paragraph
+                  style={{
+                    marginLeft: 10,
+                    fontSize: SIZES.body5,
+                    color: COLORS.gray2,
+                  }}>
+                  {moment(item.startDate).fromNow()}
+                </Paragraph>
+              </View>
               <Paragraph style={{fontSize: SIZES.body5, color: COLORS.gray2}}>
-                {moment(item.startDate, 'YYYY-MM-DD').format('YYYY-MM-DD')} ~{' '}
-                {moment(item.endDate, 'YYYY-MM-DD').format('YYYY-MM-DD')}
+                {moment(item.startDate, 'YYYY-MM-DD h:mm a').format(
+                  'YYYY-MM-DD h:mm a',
+                )}{' '}
+                ~{' '}
+                {moment(item.endDate, 'YYYY-MM-DD h:mm a').format(
+                  'YYYY-MM-DD h:mm a',
+                )}
               </Paragraph>
             </View>
             <View style={{position: 'absolute', left: '95%'}}>
@@ -219,7 +234,9 @@ const Schedule = () => {
           <View
             style={{paddingBottom: SIZES.padding, marginBottom: SIZES.margin}}>
             <FlatList
-              data={tasks_today}
+              data={tasks_today.sort(
+                (a, b) => new Date(a.startDate) - new Date(b.startDate),
+              )}
               renderItem={renderItem}
               keyExtractor={item => `${item.id}`}
               showsVerticalScrollIndicator={false}

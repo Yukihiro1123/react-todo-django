@@ -170,7 +170,7 @@ const TaskDetail = ({navigation}) => {
           </View>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <IconButton icon="clock" size={15} style={{margin: 0}}/>
-              <Paragraph style={{fontSize: SIZES.body4}}> {moment(task.startDate).format('YYYY-MM-DD')}  ~  {moment(task.endDate).format('YYYY-MM-DD')}</Paragraph>
+              <Paragraph style={{fontSize: SIZES.body4}}> {moment(task.startDate).format('YYYY-MM-DD h:mm a')} ~ {moment(task.endDate).format('YYYY-MM-DD h:mm a')}</Paragraph>
             </View>
           </View>
           {/* 概要 */}

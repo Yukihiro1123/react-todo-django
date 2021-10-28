@@ -101,7 +101,7 @@ const Tasks = ({tasks, func, onDelete}) => {
           <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
             <Paragraph style={{fontSize: SIZES.h4}}>{item.title}</Paragraph>
             <Paragraph style={{fontSize: SIZES.body5, color: COLORS.gray2}}>
-              {moment(item.endDate).fromNow()}
+              {moment(item.startDate).fromNow()}
             </Paragraph>
           </View>
           <View style={{position: 'absolute', left: '95%'}}>
