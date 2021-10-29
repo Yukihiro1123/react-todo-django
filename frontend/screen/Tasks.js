@@ -31,7 +31,6 @@ import {
   Avatar,
   Card,
   Checkbox,
-  Snackbar,
   List,
   Paragraph,
   Searchbar,
@@ -39,15 +38,17 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {COLORS, FONTS, SIZES, icons, images} from '../constants';
 import Modal from 'react-native-modal';
+import Snackbar from 'react-native-snackbar';
 
-const Tasks = ({tasks, func, onDelete}) => {
+const Tasks = ({tasks, func}) => {
   //一つ一つのタスクを表示
   const navigation = useNavigation();
   const [modal, setModal] = useState(false);
   const toggleModal = () => setModal(!modal);
   const closeModal = () => setModal(false);
 
-  function renderModal() {
+  //e => handleDelete(e, item)
+  function renderModal(item) {
     return (
       <Modal
         style={{margin: 0}}
@@ -56,13 +57,13 @@ const Tasks = ({tasks, func, onDelete}) => {
         swipeDirection="left">
         <Card style={{backgroundColor: COLORS.white, margin: 40, padding: 10}}>
           <Card.Content>
-            <Title>Delete this task ?</Title>
+            <Title>Delete this task?</Title>
           </Card.Content>
           <Card.Actions>
             <Button color={COLORS.darkblue} onPress={closeModal}>
               Cancel
             </Button>
-            <Button color={COLORS.darkblue} onPress={closeModal}>
+            <Button color={COLORS.darkblue} onPress={() => console.log(item)}>
               Delete
             </Button>
           </Card.Actions>
@@ -90,14 +91,7 @@ const Tasks = ({tasks, func, onDelete}) => {
                 : item.priority === 2
                 ? styles.bar_mid
                 : styles.bar_low,
-            ]}>
-            <View
-              style={{
-                flex: 1,
-                borderLeftColor: COLORS.black,
-                borderLeftWidth: 3,
-              }}></View>
-          </View>
+            ]}></View>
           <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
             <Paragraph style={{fontSize: SIZES.h4}}>{item.title}</Paragraph>
             <Paragraph style={{fontSize: SIZES.body5, color: COLORS.gray2}}>
@@ -115,9 +109,9 @@ const Tasks = ({tasks, func, onDelete}) => {
               />
             </TouchableOpacity>
           </View>
+          <View>{renderModal(JSON.parse(JSON.stringify(item.id)))}</View>
         </Card.Content>
       </Card>
-      <View>{renderModal()}</View>
     </View>
   );
   return (

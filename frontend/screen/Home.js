@@ -133,13 +133,13 @@ const Home = () => {
         <View style={{flexDirection: 'row'}}>
           <IconButton
             icon="format-list-bulleted"
-            size={20}
+            size={25}
             color={mode === 'list' ? COLORS.black : COLORS.gray}
             onPress={() => setMode('list')}
           />
           <IconButton
             icon="view-dashboard"
-            size={20}
+            size={25}
             color={mode === 'matrix' ? COLORS.black : COLORS.gray}
             onPress={() => setMode('matrix')}
           />
