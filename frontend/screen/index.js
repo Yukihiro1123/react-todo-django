@@ -1,3 +1,4 @@
 import Home from './Home';
-import TaskDetail from './TaskDetail';
-export {Home, TaskDetail};
+import Task from './Tasks/Task';
+import Project from './Projects/Project';
+export {Home, Task, Project};

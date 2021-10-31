@@ -29,8 +29,8 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import Modal from 'react-native-modal';
 import {COLORS, FONTS, SIZES, icons, images} from '../constants';
-import Tasks from './Tasks';
-import AddTask from './AddTask';
+import Tasks from './Tasks/Tasks';
+import AddTask from './Tasks/AddTask';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 
 const Schedule = () => {
@@ -132,8 +132,6 @@ const Schedule = () => {
           // Enable the option to swipe between months. Default = false
           enableSwipeMonths={true}
           style={{
-            // borderWidth: 1,
-            // borderColor: 'gray',
             height: 350,
           }}
           // Specify theme properties to override specific styles for calendar parts. Default = {}

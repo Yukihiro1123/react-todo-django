@@ -1,7 +1,6 @@
-/* eslint-disable prettier/prettier */
 import React, {useState, useEffect, useRef} from 'react';
 import axios from 'axios';
-import {COLORS, FONTS, SIZES, icons, images} from '../constants';
+import {COLORS, FONTS, SIZES, icons, images} from '../../constants';
 import uuid from 'react-native-uuid';
 import moment from 'moment';
 import SwitchSelector from 'react-native-switch-selector';
@@ -39,12 +38,27 @@ import {useController, useForm} from 'react-hook-form';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-const Form = ({formTitle, Title, Completed, Category, Description, StartDate, EndDate, Priority, Emergency, onCancel, onAdd}) => {
+const TaskForm = ({
+  formTitle,
+  Title,
+  Completed,
+  Category,
+  Description,
+  StartDate,
+  EndDate,
+  Priority,
+  Emergency,
+  Project,
+  onCancel,
+  onAdd,
+}) => {
   //バリデーションが必要なのは、TitleとCategory（Dateも）
   const [valTitle, setValTitle] = useState(false);
   const [valDesc, setValDesc] = useState(false);
   const [valDate, setValDate] = useState(false);
   //フォーム
+  //追加
+  const [project, setProject] = useState(Project);
   //文字
   const [title, setTitle] = useState(Title);
   const [category, setCategory] = useState(Category);
@@ -61,6 +75,7 @@ const Form = ({formTitle, Title, Completed, Category, Description, StartDate, En
     {label: 'Appointment', value: 3},
     {label: 'Habit', value: 4},
   ]);
+
   //重要度
   const [priority, setPriority] = useState(Priority);
   const [emergency, setEmergency] = useState(Emergency);
@@ -73,30 +88,40 @@ const Form = ({formTitle, Title, Completed, Category, Description, StartDate, En
   const [completed, setComplete] = useState(Completed);
   const onToggleSwitch = () => setComplete(!completed);
   //フォーム提出
-  const onSubmit = (e) => {
+  const onSubmit = e => {
     e.preventDefault();
     if (startDate > endDate) {
-    setValDate(true);
+      setValDate(true);
     }
-    if (title.replace(' ', '').replace('　','') === '') {
-    setValTitle(true);
-    //setValDesc(false);
+    if (title.replace(' ', '').replace('　', '') === '') {
+      setValTitle(true);
+      //setValDesc(false);
     }
-    if (title.length > 20){
+    if (title.length > 20) {
       //setValTitle(false);
       setValTitle(true);
-      }
-    if (description.replace(' ', '').replace('　','') === '') {
-    //setValTitle(false);
-    setValDesc(true);
+    }
+    if (description.replace(' ', '').replace('　', '') === '') {
+      //setValTitle(false);
+      setValDesc(true);
     }
     if (description.length > 1000 || description.length < 3) {
       setValDesc(true);
       console.log(description.length);
     } else {
-    setValTitle(false);
-    setValDesc(false);
-    onAdd({title, category, description, startDate, endDate, priority, emergency, completed});
+      setValTitle(false);
+      setValDesc(false);
+      onAdd({
+        title,
+        category,
+        description,
+        startDate,
+        endDate,
+        priority,
+        emergency,
+        completed,
+        project,
+      });
     }
   };
   //category
@@ -117,12 +142,13 @@ const Form = ({formTitle, Title, Completed, Category, Description, StartDate, En
       />
     );
   }
+
   //priority
   function switchSelectPriority() {
     return (
       <SwitchSelector
         options={priorityOption}
-        initial={priority-1}
+        initial={priority - 1}
         buttonColor={COLORS.peach}
         textColor={COLORS.gray2}
         hasPadding={true}
@@ -137,7 +163,7 @@ const Form = ({formTitle, Title, Completed, Category, Description, StartDate, En
     return (
       <SwitchSelector
         options={priorityOption}
-        initial={emergency-1}
+        initial={emergency - 1}
         buttonColor={COLORS.peach}
         textColor={COLORS.gray2}
         hasPadding={true}
@@ -162,43 +188,49 @@ const Form = ({formTitle, Title, Completed, Category, Description, StartDate, En
   function StartDatePick() {
     return (
       <View>
-      <DateTimePicker
-        testID="dateTimePicker"
-        value={startDate}
-        mode="datetime"
-        is24Hour={true}
-        display="compact"
-        style={{width: 200}}
-        minimumDate={new Date(2020, 1, 1)}
-        onChange={onChangeStart}
-      />
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={startDate}
+          mode="datetime"
+          is24Hour={true}
+          display="compact"
+          style={{width: 200}}
+          minimumDate={new Date(2020, 1, 1)}
+          onChange={onChangeStart}
+        />
       </View>
     );
   }
   function EndDatePick() {
     return (
       <View>
-      <DateTimePicker
-        testID="dateTimePicker"
-        value={endDate}
-        mode="datetime"
-        is24Hour={true}
-        display="compact"
-        style={{width: 200}}
-        minimumDate={new Date(2020, 1, 1)}
-        onChange={onChangeEnd}
-      />
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={endDate}
+          mode="datetime"
+          is24Hour={true}
+          display="compact"
+          style={{width: 200}}
+          minimumDate={new Date(2020, 1, 1)}
+          onChange={onChangeEnd}
+        />
       </View>
     );
   }
 
   function Check() {
     return (
-      <Switch value={completed} onValueChange={onToggleSwitch} color={COLORS.darkblue} />
+      <Switch
+        value={completed}
+        onValueChange={onToggleSwitch}
+        color={COLORS.darkblue}
+      />
     );
   }
   return (
-    <Card style={{backgroundColor: COLORS.white, margin: 1, padding: 1}} onSubmit={onSubmit}>
+    <Card
+      style={{backgroundColor: COLORS.white, margin: 1, padding: 1}}
+      onSubmit={onSubmit}>
       <Card.Title title={formTitle} />
       <Card.Content>
         {/* カテゴリ */}
@@ -210,8 +242,11 @@ const Form = ({formTitle, Title, Completed, Category, Description, StartDate, En
         <View>
           <View style={{flexDirection: 'row', marginVertical: 5}}>
             <Text style={{fontSize: SIZES.body3}}>Task Title</Text>
-            <HelperText type="error" visible={valTitle} style={{fontSize: SIZES.body4}}>
-            invalid title
+            <HelperText
+              type="error"
+              visible={valTitle}
+              style={{fontSize: SIZES.body4}}>
+              invalid title
             </HelperText>
           </View>
           <View>
@@ -228,9 +263,13 @@ const Form = ({formTitle, Title, Completed, Category, Description, StartDate, En
         </View>
         {/* 概要 */}
         <View>
-          <View style={{marginTop: 10, marginVertical: 5, flexDirection: 'row'}}>
+          <View
+            style={{marginTop: 10, marginVertical: 5, flexDirection: 'row'}}>
             <Text style={{fontSize: SIZES.body3}}>Task Description</Text>
-            <HelperText type="error" visible={valDesc} style={{fontSize: SIZES.body4}}>
+            <HelperText
+              type="error"
+              visible={valDesc}
+              style={{fontSize: SIZES.body4}}>
               invalid description
             </HelperText>
           </View>
@@ -259,27 +298,50 @@ const Form = ({formTitle, Title, Completed, Category, Description, StartDate, En
         </View>
         {/* 日付 */}
         <View>
-          <View style={{marginTop: 10,  flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-            <Text style={{fontSize: SIZES.body3, marginRight: 40}}>Start date </Text>
-            <View>
-            {StartDatePick()}
-            </View>
-            <HelperText type="error" visible={valDate} style={{fontSize: SIZES.body4}}>
-                invalid date.
+          <View
+            style={{
+              marginTop: 10,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+            <Text style={{fontSize: SIZES.body3, marginRight: 40}}>
+              Start date{' '}
+            </Text>
+            <View>{StartDatePick()}</View>
+            <HelperText
+              type="error"
+              visible={valDate}
+              style={{fontSize: SIZES.body4}}>
+              invalid date.
             </HelperText>
           </View>
-          <View style={{marginTop: 10,  flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-            <Text style={{fontSize: SIZES.body3, marginRight: 40}}>End date   </Text>
-            <View>
-            {EndDatePick()}
-            </View>
-            <HelperText type="error" visible={valDate} style={{fontSize: SIZES.body4}}>
-                invalid date.
+          <View
+            style={{
+              marginTop: 10,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+            <Text style={{fontSize: SIZES.body3, marginRight: 40}}>
+              End date{' '}
+            </Text>
+            <View>{EndDatePick()}</View>
+            <HelperText
+              type="error"
+              visible={valDate}
+              style={{fontSize: SIZES.body4}}>
+              invalid date.
             </HelperText>
           </View>
         </View>
         {/* 状態 */}
-        <View style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View
+          style={{
+            marginVertical: 10,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
           <Text style={{fontSize: SIZES.body3}}>Status</Text>
           {Check()}
         </View>
@@ -300,4 +362,4 @@ const Form = ({formTitle, Title, Completed, Category, Description, StartDate, En
   );
 };
 
-export default Form;
+export default TaskForm;

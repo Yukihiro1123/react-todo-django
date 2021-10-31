@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import Tasks from './Tasks';
+import Tasks from './Tasks/Tasks';
 import RNRestart from 'react-native-restart';
 import {
   SafeAreaView,

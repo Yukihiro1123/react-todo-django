@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useMemo, useRef} from 'react';
 import axios from 'axios';
-import {addTask} from '../utils/axios';
+import {addProject} from '../../utils/axios';
 import RNRestart from 'react-native-restart';
 import {
   SafeAreaView,
@@ -34,11 +34,11 @@ import {
 } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import Snackbar from 'react-native-snackbar';
-import {COLORS, FONTS, SIZES, icons, images} from '../constants';
-import Form from './Form';
+import {COLORS, FONTS, SIZES, icons, images} from '../../constants';
+import ProjectForm from './ProjectForm';
 //modalと追加ボタン、タスク追加ボタンの挙動
-const AddTask = () => {
-  const [tasks, setTasks] = useState('');
+const AddProject = () => {
+  const [projects, setProjects] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -46,22 +46,23 @@ const AddTask = () => {
   //タスク取得
   useEffect(() => {
     axios
-      .get('http://127.0.0.1:8000/api/todo/')
+      .get('http://127.0.0.1:8000/api/project/')
       .then(res => {
-        setTasks(res.data);
+        setProjects(res.data);
         //console.log(res.data);
       })
       .catch(error => console.log(error));
-  }, [tasks]);
+  }, []);
   //タスク追加
-  const onAdd = async task => {
-    await addTask(task);
+  const onAdd = async project => {
+    await addProject(project);
+    console.log(project);
     setModalVisible(false);
-    setTasks([...tasks, task]);
+    setProjects([...projects, project]);
     //RNRestart.Restart();
-    console.log('task added');
+    console.log('project added');
     Snackbar.show({
-      text: 'Task added successfully',
+      text: 'Project added successfully',
       duration: Snackbar.LENGTH_SHORT,
     });
   };
@@ -73,15 +74,11 @@ const AddTask = () => {
         onSwipeComplete={() => setModalVisible(false)}
         swipeDirection="left">
         {/* フォーム */}
-        <Form
-          formTitle={'Add Task'}
-          Title={''}
-          Category={1}
-          Description={''}
-          StartDate={new Date()}
-          EndDate={new Date()}
-          Priority={1}
-          Emergency={1}
+        <ProjectForm
+          formTitle={'Add Project'}
+          ProjectName={''}
+          Overview={''}
+          Deadline={new Date()}
           Completed={false}
           onCancel={() => setModalVisible(false)}
           onAdd={onAdd}
@@ -137,4 +134,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddTask;
+export default AddProject;

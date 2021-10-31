@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {BottomNavigation, Text} from 'react-native-paper';
 import Home from '../screen/Home';
 import Timer from '../screen/Timer';
-import AddTask from '../screen/AddTask';
 import Schedule from '../screen/Schedule';
 import Search from '../screen/Search';
 import {COLORS, FONTS, SIZES, icons, images} from '../constants';
@@ -15,6 +14,7 @@ const SearchRoute = () => <Search />;
 const Tabs = () => {
   const [index, setIndex] = useState(0);
   const [routes] = useState([
+    //{key: 'home', title: 'Home', icon: 'home'},
     {key: 'home', title: 'Home', icon: 'home'},
     {key: 'calendar', title: 'Calendar', icon: 'calendar'},
     {key: 'timer', title: 'Timer', icon: 'timer'},

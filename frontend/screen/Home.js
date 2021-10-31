@@ -34,6 +34,7 @@ import {
   Snackbar,
   List,
   Paragraph,
+  ProgressBar,
   Menu,
   Searchbar,
 } from 'react-native-paper';
@@ -46,8 +47,8 @@ import moment from 'moment';
 import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
-import AddTask from './AddTask';
-import Tasks from './Tasks';
+import AddProject from './Projects/AddProject';
+import Projects from './Projects/Projects';
 
 const Home = () => {
   const {width, height, scale} = Dimensions.get('window');
@@ -55,53 +56,30 @@ const Home = () => {
   //表示形式
   const [mode, setMode] = useState('list');
   //タスク
-  const [tasks, setTasks] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [habits, setHabits] = useState([]);
   //リスト用タスク
-  const tasks_comp = tasks.filter(a => a.completed === true);
-  const tasks_ong = tasks.filter(a => a.completed !== true);
-  const tasks_urg = tasks.filter(a => a.emergency >= 2);
-  const tasks_imp = tasks.filter(a => a.priority >= 2);
-  //マトリクス用タスク
-  const tasks_first = tasks
-    .filter(a => a.completed === false)
-    .filter(a => a.priority > 1)
-    .filter(a => a.emergency > 1);
-  const tasks_second = tasks
-    .filter(b => b.completed === false)
-    .filter(b => b.priority > 1)
-    .filter(b => b.emergency === 1);
-  const tasks_third = tasks
-    .filter(c => c.completed === false)
-    .filter(c => c.priority === 1)
-    .filter(c => c.emergency > 1);
-  const tasks_forth = tasks
-    .filter(d => d.completed === false)
-    .filter(d => d.priority === 1)
-    .filter(d => d.emergency === 1);
+  const projects_comp = projects.filter(a => a.completed === true);
+  const projects_ong = projects.filter(a => a.completed !== true);
   //タブ
   const [index, setIndex] = useState(0);
   //メニュー
   const [visible, setVisible] = useState(false);
-  const toggleMenu = () => setVisible(!visible);
-  const closeMenu = () => setVisible(false);
-  //ソート
-  const [sort, setSort] = useState('date');
-  //タスク取得
+  //プロジェクト取得
   useEffect(() => {
     axios
-      .get('http://127.0.0.1:8000/api/todo/')
+      .get('http://127.0.0.1:8000/api/project/')
       .then(res => {
-        setTasks(res.data);
+        setProjects(res.data);
         //console.log(res.data);
       })
       .catch(error => console.log(error));
-  }, [tasks]);
+  }, [projects]);
 
   function renderHeader() {
     return (
       <Appbar.Header style={{backgroundColor: COLORS.white}}>
-        <Appbar.Content title="Task management" />
+        <Appbar.Content title="Home" />
         <Appbar.Action />
         <Appbar.Action icon="dots-vertical" />
       </Appbar.Header>
@@ -120,75 +98,16 @@ const Home = () => {
           height: 30,
         }}>
         <View>
-          {mode === 'list' ? (
-            <Paragraph style={{marginHorizontal: 15, fontSize: SIZES.h3}}>
-              Task List
-            </Paragraph>
-          ) : (
-            <Paragraph style={{marginHorizontal: 15, fontSize: SIZES.h3}}>
-              Task Matrix
-            </Paragraph>
-          )}
-        </View>
-        <View style={{flexDirection: 'row'}}>
-          <IconButton
-            icon="format-list-bulleted"
-            size={25}
-            color={mode === 'list' ? COLORS.black : COLORS.gray}
-            onPress={() => setMode('list')}
-          />
-          <IconButton
-            icon="view-dashboard"
-            size={25}
-            color={mode === 'matrix' ? COLORS.black : COLORS.gray}
-            onPress={() => setMode('matrix')}
-          />
+          <Paragraph style={{marginHorizontal: 15, fontSize: SIZES.h3}}>
+            Projects
+          </Paragraph>
         </View>
       </View>
     );
   }
 
-  function sortFunc() {
-    if (sort === 'date') {
-      return (a, b) => new Date(a.startDate) - new Date(b.startDate);
-    } else if (sort === 'priority') {
-      return (a, b) => b.priority - a.priority;
-    }
-  }
-
-  function renderSort() {
-    return (
-      <Provider>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            padding: 0,
-            marginRight: 5,
-          }}>
-          <Menu
-            visible={visible}
-            onDismiss={closeMenu}
-            style={{position: 'absolute', top: 0}}
-            anchor={
-              <Button
-                icon="sort-variant"
-                mode="text"
-                onPress={toggleMenu}
-                color={COLORS.black}>
-                Sort by
-              </Button>
-            }>
-            <Menu.Item onPress={() => setSort('date')} title="date" />
-            <Menu.Item onPress={() => setSort('priority')} title="priority" />
-          </Menu>
-        </View>
-      </Provider>
-    );
-  }
-
   //リスト表示
-  function renderTaskList(task, text) {
+  function renderProjectList(task, text) {
     //タスクの量とタスクリスト
     return (
       <View>
@@ -201,12 +120,11 @@ const Home = () => {
             zIndex: 1,
           }}>
           <Paragraph style={{marginHorizontal: 10}}>
-            {task.length} {text} tasks
+            {task.length} {text} projects
           </Paragraph>
-          {renderSort()}
         </View>
         <View style={{height: height / 1.5}}>
-          <Tasks tasks={task} func={sortFunc()} />
+          <Projects projects={task} />
         </View>
       </View>
     );
@@ -234,24 +152,6 @@ const Home = () => {
             titleStyle={styles.tabTitle}
           />
           <Tab.Item
-            title="important"
-            animationtype="timing"
-            style={styles.tabItem}
-            variant="primary"
-            indicatorStyle={{backgroundColor: COLORS.white}}
-            containerStyle={styles.tabContainer}
-            titleStyle={styles.tabTitle}
-          />
-          <Tab.Item
-            title="urgent"
-            animationtype="timing"
-            style={styles.tabItem}
-            variant="primary"
-            indicatorStyle={{backgroundColor: COLORS.white}}
-            containerStyle={styles.tabContainer}
-            titleStyle={styles.tabTitle}
-          />
-          <Tab.Item
             title="completed"
             animationtype="timing"
             style={styles.tabItem}
@@ -264,100 +164,12 @@ const Home = () => {
         <View style={{marginTop: 8, height: '80%'}}>
           <TabView value={index} onChange={setIndex}>
             <TabView.Item style={{width: '100%'}}>
-              {renderTaskList(tasks_ong, 'ongoing')}
+              {renderProjectList(projects_ong, 'ongoing')}
             </TabView.Item>
             <TabView.Item style={{width: '100%'}}>
-              {renderTaskList(tasks_imp, 'important')}
-            </TabView.Item>
-            <TabView.Item style={{width: '100%'}}>
-              {renderTaskList(tasks_urg, 'urgent')}
-            </TabView.Item>
-            <TabView.Item style={{width: '100%'}}>
-              {renderTaskList(tasks_comp, 'completed')}
+              {renderProjectList(projects_comp, 'completed')}
             </TabView.Item>
           </TabView>
-        </View>
-      </View>
-    );
-  }
-
-  //マトリックス表示
-  function renderTaskMatrix(tasks, text, color) {
-    return (
-      <View
-        style={{
-          marginHorizontal: 5,
-          marginTop: 0,
-          marginBottom: 5,
-          padding: 5,
-          backgroundColor: COLORS.white,
-          width: width / 2.2,
-          height: 290,
-          borderRadius: 10,
-          ...styles.shadow,
-        }}>
-        <View>
-          <Paragraph style={{fontSize: SIZES.body5, color: color}}>
-            {text}
-          </Paragraph>
-        </View>
-        <ScrollView style={{paddingTop: 3}}>
-          {tasks.length > 0 ? (
-            tasks.map(task => (
-              <TouchableOpacity
-                onPress={() => navigation.navigate('TaskDetail', {task: task})}
-                style={{paddingVertical: 1}}>
-                <Paragraph style={{paddingHorizontal: 5}}>
-                  {task.title}
-                </Paragraph>
-              </TouchableOpacity>
-            ))
-          ) : (
-            <View style={{justifyContent: 'center'}}>
-              <Paragraph
-                style={{
-                  fontSize: SIZES.h4,
-                  color: COLORS.gray,
-                  paddingVertical: width / 5,
-                  paddingHorizontal: width / 8,
-                  margin: 0,
-                }}>
-                No tasks
-              </Paragraph>
-            </View>
-          )}
-        </ScrollView>
-      </View>
-    );
-  }
-  function renderMatrix() {
-    return (
-      <View>
-        {/* priority高いグループ2つ */}
-        <View style={{flexDirection: 'row', marginLeft: 10}}>
-          <View style={{marginBottom: 5}}>
-            {renderTaskMatrix(tasks_first, 'Important & Urgent', '#cd5c5c')}
-          </View>
-          <View style={{marginBottom: 5}}>
-            {renderTaskMatrix(
-              tasks_second,
-              'Important & Not Urgent',
-              '#daa520',
-            )}
-          </View>
-        </View>
-        {/* priority低いグループ2つ */}
-        <View style={{flexDirection: 'row', marginLeft: 10}}>
-          <View>
-            {renderTaskMatrix(tasks_third, 'Unimportant & Urgent', '#4682b4')}
-          </View>
-          <View>
-            {renderTaskMatrix(
-              tasks_forth,
-              'Unimportant & Not Urgent',
-              '#008080',
-            )}
-          </View>
         </View>
       </View>
     );
@@ -371,15 +183,11 @@ const Home = () => {
       <View style={{marginBottom: 10}}>{renderSwitchMode()}</View>
       {/* タスク一覧 */}
       <View>
-        {mode === 'list' ? (
-          <View>{renderTab()}</View>
-        ) : (
-          <View>{renderMatrix()}</View>
-        )}
+        <View>{renderTab()}</View>
       </View>
       {/* タスク追加フォーム */}
       <View style={{position: 'absolute', bottom: 0, right: 20}}>
-        <AddTask />
+        <AddProject />
       </View>
     </View>
   );
@@ -396,6 +204,8 @@ const styles = StyleSheet.create({
   tabContainer: {
     width: 1000,
     backgroundColor: COLORS.white,
+    alignItems: 'center',
+    justifyContent: 'center',
     margin: 0,
     paddingHorizontal: 0,
   },

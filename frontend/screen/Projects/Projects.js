@@ -1,10 +1,10 @@
 import React, {useState, useEffect, useRef} from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import {addTask} from '../utils/axios';
-import {editTask} from '../utils/axios';
-import {deleteTask} from '../utils/axios';
-import {finishTask} from '../utils/axios';
+import {addTask} from '../../utils/axios';
+import {editTask} from '../../utils/axios';
+import {deleteTask} from '../../utils/axios';
+import {finishTask} from '../../utils/axios';
 import RNRestart from 'react-native-restart';
 import {
   SafeAreaView,
@@ -30,93 +30,74 @@ import {
   Provider,
   Avatar,
   Card,
+  Colors,
   Checkbox,
   List,
   Paragraph,
+  ProgressBar,
   Searchbar,
 } from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
-import {COLORS, FONTS, SIZES, icons, images} from '../constants';
+import {COLORS, FONTS, SIZES, icons, images} from '../../constants';
 import Modal from 'react-native-modal';
 import Snackbar from 'react-native-snackbar';
 
-const Tasks = ({tasks, func}) => {
+const Projects = ({projects, func}) => {
   //一つ一つのタスクを表示
   const navigation = useNavigation();
   const [modal, setModal] = useState(false);
-  const toggleModal = () => setModal(!modal);
-  const closeModal = () => setModal(false);
 
-  //e => handleDelete(e, item)
-  function renderModal(item) {
-    return (
-      <Modal
-        style={{margin: 0}}
-        isVisible={modal}
-        onSwipeComplete={closeModal}
-        swipeDirection="left">
-        <Card style={{backgroundColor: COLORS.white, margin: 40, padding: 10}}>
-          <Card.Content>
-            <Title>Delete this task?</Title>
-          </Card.Content>
-          <Card.Actions>
-            <Button color={COLORS.darkblue} onPress={closeModal}>
-              Cancel
-            </Button>
-            <Button color={COLORS.darkblue} onPress={() => console.log(item)}>
-              Delete
-            </Button>
-          </Card.Actions>
-        </Card>
-      </Modal>
-    );
-  }
   const renderItem = ({item}) => (
     <View>
       <Card
-        onPress={() => navigation.navigate('TaskDetail', {task: item})}
-        onLongPress={toggleModal}
+        onPress={() => navigation.navigate('Project', {project: item})}
         style={{borderRadius: 10, margin: 5, padding: 0, ...styles.shadow}}>
         <Card.Content
           style={{
             padding: 0,
             flexDirection: 'row',
             alignItems: 'center',
-            height: 65,
+            height: 120,
+            width: 185,
           }}>
-          <View
-            style={[
-              item.priority !== 1 && item.priority > 2
-                ? styles.bar_high
-                : item.priority === 2
-                ? styles.bar_mid
-                : styles.bar_low,
-            ]}></View>
           <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
-            <Paragraph style={{fontSize: SIZES.h4}}>{item.title}</Paragraph>
-            <Paragraph style={{fontSize: SIZES.body5, color: COLORS.gray2}}>
-              {moment(item.startDate).fromNow()}
+            <Paragraph style={{fontSize: SIZES.h4}}>
+              {item.projectName}
             </Paragraph>
-          </View>
-          <View style={{position: 'absolute', left: '95%'}}>
-            <TouchableOpacity
-              style={{justifyContent: 'flex-end', alignItems: 'flex-end'}}
-              onPress={() => navigation.navigate('TaskDetail', {task: item})}>
-              <Image
-                source={icons.chevron}
-                resizeMode="contain"
-                style={{justifyContent: 'flex-end', width: 40, height: 40}}
+            <Paragraph style={{fontSize: SIZES.body5, color: COLORS.gray2}}>
+              {moment(item.deadline).fromNow()}
+            </Paragraph>
+            <View
+              style={{
+                flexDirection: 'row',
+              }}>
+              <Paragraph style={{fontSize: SIZES.body5, color: COLORS.gray2}}>
+                {item.todo.length} tasks
+              </Paragraph>
+              <Paragraph
+                style={{
+                  fontSize: SIZES.body5,
+                  color: COLORS.gray2,
+                  marginLeft: 80,
+                }}>
+                50%
+              </Paragraph>
+            </View>
+            <View style={{margin: 10}}>
+              <ProgressBar
+                progress={0.5}
+                color={Colors.red800}
+                style={{height: 3, width: 130}}
               />
-            </TouchableOpacity>
+            </View>
           </View>
-          <View>{renderModal(JSON.parse(JSON.stringify(item.id)))}</View>
         </Card.Content>
       </Card>
     </View>
   );
   return (
     <View>
-      {tasks.length > 0 ? (
+      {projects.length > 0 ? (
         <View
           style={{
             marginRight: 5,
@@ -124,11 +105,12 @@ const Tasks = ({tasks, func}) => {
             padding: 0,
           }}>
           <FlatList
-            data={tasks.sort(func)} //.sort((a, b) => b.priority - a.priority) で重要度高い順
+            data={projects} //.sort((a, b) => b.priority - a.priority) で重要度高い順
             renderItem={renderItem}
             keyExtractor={item => `${item.id}`}
             showsVerticalScrollIndicator={false}
             onEndReachedThreshold={0.3}
+            numColumns={2}
           />
         </View>
       ) : (
@@ -146,7 +128,7 @@ const Tasks = ({tasks, func}) => {
               padding: SIZES.padding,
               margin: SIZES.margin,
             }}>
-            No tasks to show.
+            No projects to show.
           </Paragraph>
         </View>
       )}
@@ -198,4 +180,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Tasks;
+export default Projects;
