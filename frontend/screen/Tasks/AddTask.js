@@ -37,7 +37,7 @@ import Snackbar from 'react-native-snackbar';
 import {COLORS, FONTS, SIZES, icons, images} from '../../constants';
 import TaskForm from './TaskForm';
 //modalと追加ボタン、タスク追加ボタンの挙動
-const AddTask = () => {
+const AddTask = ({projectId}) => {
   const [tasks, setTasks] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
@@ -84,7 +84,7 @@ const AddTask = () => {
           Priority={1}
           Emergency={1}
           Completed={false}
-          Project={1}
+          Project={projectId}
           onCancel={() => setModalVisible(false)}
           onAdd={onAdd}
         />

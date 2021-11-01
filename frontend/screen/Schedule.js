@@ -156,7 +156,7 @@ const Schedule = () => {
     const renderItem = ({item}) => (
       <View>
         <Card
-          onPress={() => navigation.navigate('TaskDetail', {task: item})}
+          onPress={() => navigation.navigate('Task', {task: item})}
           style={{borderRadius: 10, margin: 5, ...styles.shadow}}>
           <Card.Content
             style={{flexDirection: 'row', alignItems: 'center', height: 65}}>

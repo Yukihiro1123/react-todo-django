@@ -191,7 +191,7 @@ const ProjectForm = ({
               justifyContent: 'space-between',
             }}>
             <Text style={{fontSize: SIZES.body3, marginRight: 40}}>
-              Deadline{' '}
+              Deadline{'  '}
             </Text>
             <View>{DeadlinePick()}</View>
             <HelperText

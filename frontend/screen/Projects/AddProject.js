@@ -45,13 +45,19 @@ const AddProject = () => {
   };
   //タスク取得
   useEffect(() => {
+    let isMounted = true;
     axios
       .get('http://127.0.0.1:8000/api/projects/')
       .then(res => {
-        setProjects(res.data);
+        if (isMounted) {
+          setProjects(res.data);
+        }
         //console.log(res.data);
       })
       .catch(error => console.log(error));
+    return () => {
+      isMounted = false;
+    };
   }, [projects]);
   //タスク追加
   const onAdd = async project => {
@@ -59,7 +65,6 @@ const AddProject = () => {
     console.log(project);
     setModalVisible(false);
     setProjects([...projects, project]);
-    //RNRestart.Restart();
     console.log('project added');
     Snackbar.show({
       text: 'Project added successfully',

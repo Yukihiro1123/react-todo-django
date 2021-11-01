@@ -56,13 +56,13 @@ import {deleteProject} from '../../utils/axios';
 import {finishProject} from '../../utils/axios';
 
 const Project = ({route}) => {
+  const [project, setProject] = useState([]);
+  const projectId = project.id;
   const {width, height, scale} = Dimensions.get('window');
   const navigation = useNavigation();
   //表示形式
   const [mode, setMode] = useState('list');
   //タスク
-  const [project, setProject] = useState([]);
-  const projectId = project.id;
   const [tasks, setTasks] = useState([]);
   //リスト用タスク
   const tasks_comp = tasks.filter(a => a.completed === true);
@@ -170,11 +170,14 @@ const Project = ({route}) => {
   useEffect(() => {
     let {project} = route.params;
     setProject(project);
-    let tasks = project['todo'];
-    setTasks(tasks);
-    //console.log(tasks);
-    console.log(project);
-  }, [route.params, project, tasks]);
+    axios
+      .get('http://127.0.0.1:8000/api/projects/api/todo/')
+      .then(res => {
+        setTasks(res.data.filter(a => a.project === projectId));
+        //console.log(res.data);
+      })
+      .catch(error => console.log(error));
+  }, [project, route.params, tasks, projectId]);
 
   function renderHeader() {
     return (
@@ -562,7 +565,7 @@ const Project = ({route}) => {
       <View>{renderComp()}</View>
       {/* タスク追加フォーム */}
       <View style={{position: 'absolute', bottom: 0, right: 20}}>
-        <AddTask project={projectId} />
+        <AddTask projectId={projectId} />
       </View>
     </View>
   );

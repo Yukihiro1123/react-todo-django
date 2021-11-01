@@ -46,6 +46,26 @@ const Projects = ({projects, func}) => {
   //一つ一つのタスクを表示
   const navigation = useNavigation();
   const [modal, setModal] = useState(false);
+  //進捗計算関数
+  function CalcProgress(a, b) {
+    if (isNaN(a / b) === true) {
+      return 0;
+    }
+    if (a === 0 || b === 0) {
+      return 0;
+    }
+    if (a === 0) {
+      return 0;
+    }
+    if (b === 0) {
+      return 0;
+    }
+    if (isNaN(a) || isNaN(b)) {
+      return 0;
+    } else {
+      return a / b;
+    }
+  }
 
   const renderItem = ({item}) => (
     <View>
@@ -74,19 +94,39 @@ const Projects = ({projects, func}) => {
               <Paragraph style={{fontSize: SIZES.body5, color: COLORS.gray2}}>
                 {item.todo.length} tasks
               </Paragraph>
-              <Paragraph
-                style={{
-                  fontSize: SIZES.body5,
-                  color: COLORS.gray2,
-                  marginLeft: 80,
-                }}>
-                50%
-              </Paragraph>
+              {item.todo.length !== 0 &&
+              item.todo.filter(a => a.completed === true).length !== 0 ? (
+                <Paragraph
+                  style={{
+                    fontSize: SIZES.body5,
+                    color: COLORS.black,
+                    marginLeft: 80,
+                  }}>
+                  {Math.round(
+                    (item.todo.filter(a => a.completed === true).length /
+                      item.todo.length) *
+                      100,
+                  )}
+                  %
+                </Paragraph>
+              ) : (
+                <Paragraph
+                  style={{
+                    fontSize: SIZES.body5,
+                    color: COLORS.black,
+                    marginLeft: 80,
+                  }}>
+                  0%
+                </Paragraph>
+              )}
             </View>
             <View style={{margin: 10}}>
               <ProgressBar
-                progress={0.5}
-                color={Colors.red800}
+                progress={CalcProgress(
+                  item.todo.filter(a => a.completed === true).length,
+                  item.todo.length,
+                )}
+                color={COLORS.black}
                 style={{height: 3, width: 130}}
               />
             </View>

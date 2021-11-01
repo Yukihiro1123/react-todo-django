@@ -324,7 +324,7 @@ const TaskForm = ({
               justifyContent: 'space-between',
             }}>
             <Text style={{fontSize: SIZES.body3, marginRight: 40}}>
-              End date{' '}
+              End date{'   '}
             </Text>
             <View>{EndDatePick()}</View>
             <HelperText
