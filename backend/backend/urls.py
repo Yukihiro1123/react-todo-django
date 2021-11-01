@@ -15,13 +15,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
+from rest_framework_nested import routers
 from todo import views
 
-router = routers.DefaultRouter()
-router.register(r'todo', views.TodoView, 'todo')
+#router = routers.DefaultRouter()
+router = routers.SimpleRouter()
+router.register(r'projects', views.ProjectView)
+project_router = routers.NestedSimpleRouter(router, r'projects', lookup='project')
+project_router.register(r'todo', views.TodoView, basename='project-todo')
 #追加
-router.register(r'project', views.ProjectView, 'project')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('api/', include(project_router.urls)),
 ]
