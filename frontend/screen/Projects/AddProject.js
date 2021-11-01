@@ -46,13 +46,13 @@ const AddProject = () => {
   //タスク取得
   useEffect(() => {
     axios
-      .get('http://127.0.0.1:8000/api/project/')
+      .get('http://127.0.0.1:8000/api/projects/')
       .then(res => {
         setProjects(res.data);
         //console.log(res.data);
       })
       .catch(error => console.log(error));
-  }, []);
+  }, [projects]);
   //タスク追加
   const onAdd = async project => {
     await addProject(project);

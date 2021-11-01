@@ -53,7 +53,7 @@ const Schedule = () => {
 
   useEffect(() => {
     axios
-      .get('http://127.0.0.1:8000/api/todo/')
+      .get('http://127.0.0.1:8000/api/projects/api/todo')
       .then(res => {
         setTasks(res.data);
       })

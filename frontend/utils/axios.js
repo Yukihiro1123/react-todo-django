@@ -1,6 +1,6 @@
 import axios from 'axios';
-const baseUrl = 'http://127.0.0.1:8000/api/todo/';
-const projectUrl = 'http://127.0.0.1:8000/api/project/';
+const baseUrl = 'http://127.0.0.1:8000/api/projects/api/todo/';
+const projectUrl = 'http://127.0.0.1:8000/api/projects/';
 
 const addTask = async task => {
   await axios

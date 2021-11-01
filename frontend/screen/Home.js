@@ -68,7 +68,7 @@ const Home = () => {
   //プロジェクト取得
   useEffect(() => {
     axios
-      .get('http://127.0.0.1:8000/api/project/')
+      .get('http://127.0.0.1:8000/api/projects/')
       .then(res => {
         setProjects(res.data);
         //console.log(res.data);

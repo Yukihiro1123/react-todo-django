@@ -55,8 +55,7 @@ import {editProject} from '../../utils/axios';
 import {deleteProject} from '../../utils/axios';
 import {finishProject} from '../../utils/axios';
 
-const Project = () => {
-  const route = useRoute();
+const Project = ({route}) => {
   const {width, height, scale} = Dimensions.get('window');
   const navigation = useNavigation();
   //表示形式
@@ -525,7 +524,10 @@ const Project = () => {
         onSwipeComplete={() => setAlertVisible(false)}
         swipeDirection="left">
         <Card style={{backgroundColor: COLORS.white, margin: 40, padding: 10}}>
-          <Card.Title title="Delete this Project?" />
+          <Card.Title
+            title="Delete this Project?"
+            subtitle="Task will be deleted as well."
+          />
           <Card.Actions>
             <Button
               color={COLORS.darkblue}
