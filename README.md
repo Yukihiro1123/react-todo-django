@@ -17,7 +17,7 @@
 <img src="https://user-images.githubusercontent.com/85789574/141729359-3d24f979-7be8-4408-8db9-6a0953ec5031.png" width="100px">
 
 ## フォーム
-* タスクの追加、編集時に用いられる
+* タスクの追加、編集時に使用
 <img src="https://user-images.githubusercontent.com/85789574/141729362-775b3def-b578-42b7-aeb4-d4f64c85ffdd.png" width="100px">
 
 ## カレンダー
