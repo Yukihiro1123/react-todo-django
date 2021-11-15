@@ -1,12 +1,13 @@
 # 多機能タスク管理アプリ（開発中）
 ## プロジェクト画面
-* プロジェクトの作成、編集、削除が可能
+* プロジェクトの作成、編集、削除
 * プロジェクトごとの進行度も表示
 <img src="https://user-images.githubusercontent.com/85789574/141729346-7ee39b41-aad4-4203-aec9-6e06e34b1d04.png" width="100px">
 
 ## タスク一覧画面
-* タスクの作成、編集、削除が可能
-* 重要度と緊急度のマトリックス表示も可能
+* タスクの作成、編集、削除
+* 重要度と緊急度のマトリックス表示
+* タスクのソート機能
 <p>
 <img src="https://user-images.githubusercontent.com/85789574/141729353-9ea23628-c02a-4d02-8ece-13d9657c3100.png" width="100px">
 <img src="https://user-images.githubusercontent.com/85789574/141729357-b19e1dae-541d-45cc-885a-ed900abeaa46.png" width="100px">
